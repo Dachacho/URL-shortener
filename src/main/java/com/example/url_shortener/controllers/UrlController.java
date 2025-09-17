@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api")
 public class UrlController {
     private final UrlService urlService;
 
@@ -26,9 +25,9 @@ public class UrlController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createShortUrl(@RequestBody Url url) {
-        String shortId = urlService.createShortUrl(url.getOriginalUrl());
-        String shortUrl = "http://localhost:8080/api/" + shortId;
+    public ResponseEntity<String> createShortUrl(@RequestBody String url) {
+        String shortId = urlService.createShortUrl(url);
+        String shortUrl = "http://localhost:8080/" + shortId;
         return ResponseEntity.ok(shortUrl);
     }
 }

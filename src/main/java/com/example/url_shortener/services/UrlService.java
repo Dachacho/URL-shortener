@@ -13,7 +13,7 @@ public class UrlService {
         this.urlRepository = urlRepository;
     }
 
-    public String generateShortId() {
+    private String generateShortId() {
         String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder shortId = new StringBuilder();
         for (int i = 0; i < 6; i++) {
@@ -23,8 +23,16 @@ public class UrlService {
         return shortId.toString();
     }
 
+    private String normalizeUrl(String url) {
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            return "http://" + url;
+        }
+        return url;
+    }
+
     public String createShortUrl(String originalUrl) {
-        String existingId = urlRepository.findByOriginalUrl(originalUrl)
+        String normalizedUrl = normalizeUrl(originalUrl);
+        String existingId = urlRepository.findByOriginalUrl(normalizedUrl)
                 .map(Url::getId)
                 .orElse(null);
         if (existingId != null) {
@@ -37,7 +45,7 @@ public class UrlService {
             shortId = generateShortId();
         } while (urlRepository.existsById(shortId));
 
-        Url url = new Url(shortId, originalUrl);
+        Url url = new Url(shortId, normalizedUrl);
         urlRepository.save(url);
         return shortId;
     }
