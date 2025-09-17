@@ -1,5 +1,6 @@
-package com.example.url_shortener.models;
+package com.example.url_shortener.repositories;
 
+import com.example.url_shortener.models.Url;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
