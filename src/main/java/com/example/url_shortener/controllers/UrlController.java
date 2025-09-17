@@ -1,23 +1,16 @@
-package com.example.url_shortener;
+package com.example.url_shortener.controllers;
 
 import com.example.url_shortener.models.Url;
-import com.example.url_shortener.repositories.UrlRepository;
 import com.example.url_shortener.services.UrlService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
-public class controllers {
+public class UrlController {
     private final UrlService urlService;
 
-    public controllers(UrlService urlService) {
+    public UrlController(UrlService urlService) {
         this.urlService = urlService;
     }
 
@@ -30,4 +23,9 @@ public class controllers {
         return ResponseEntity.notFound().build();
     }
 
+    @PostMapping
+    public ResponseEntity<String> createShortUrl(@RequestBody Url url) {
+        String shortId = urlService.createShortUrl(url.getOriginalUrl());
+        return ResponseEntity.ok(shortId);
+    }
 }
