@@ -1,5 +1,6 @@
 package com.example.url_shortener.controllers;
 
+import com.example.url_shortener.dtos.CreateUrlRequest;
 import com.example.url_shortener.models.Url;
 import com.example.url_shortener.services.UrlService;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +26,8 @@ public class UrlController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createShortUrl(@RequestBody String url) {
-        String shortId = urlService.createShortUrl(url);
+    public ResponseEntity<String> createShortUrl(@RequestBody CreateUrlRequest url) {
+        String shortId = urlService.createShortUrl(url.getOriginalUrl());
         String shortUrl = "http://localhost:8080/" + shortId;
         return ResponseEntity.ok(shortUrl);
     }
