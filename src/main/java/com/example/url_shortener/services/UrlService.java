@@ -13,7 +13,7 @@ public class UrlService {
         this.urlRepository = urlRepository;
     }
 
-    private String generateShortId() {
+    public String generateShortId() {
         String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder shortId = new StringBuilder();
         for (int i = 0; i < 6; i++) {
@@ -23,7 +23,7 @@ public class UrlService {
         return shortId.toString();
     }
 
-    private String createShortUrl(String originalUrl) {
+    public String createShortUrl(String originalUrl) {
         String existingId = urlRepository.findByOriginalUrl(originalUrl)
                 .map(Url::getId)
                 .orElse(null);
@@ -42,7 +42,7 @@ public class UrlService {
         return shortId;
     }
 
-    private String findById(String id) {
+    public String findById(String id) {
         return urlRepository.findById(id)
                 .map(Url::getOriginalUrl)
                 .orElse(null);
