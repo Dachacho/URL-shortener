@@ -80,14 +80,12 @@ public class UrlService {
             return null;
         }
 
-        UrlResponse urlResponse = new UrlResponse(
+        return new UrlResponse(
             url.getId(),
             url.getOriginalUrl(),
             url.isDisabled(),
             url.getExpiresAt(),
             url.getVisitCount()
         );
-
-        return urlResponse;
     }
 }
