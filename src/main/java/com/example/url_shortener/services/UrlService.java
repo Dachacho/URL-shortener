@@ -2,7 +2,6 @@ package com.example.url_shortener.services;
 
 import com.example.url_shortener.models.Url;
 import com.example.url_shortener.repositories.UrlRepository;
-import lombok.Data;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,10 +22,18 @@ public class UrlService {
         return shortId.toString();
     }
 
-    private String normalizeUrl(String url) {
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            return "http://" + url;
+    private String normalizeUrl(String raw) {
+        String url = raw == null ? "" : raw.trim();
+
+        //for the quotes issue i had in the test cases
+        if (url.startsWith("\"") && url.endsWith("\"") && url.length() > 1) {
+            url = url.substring(1, url.length() - 1);
         }
+
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            return "https://" + url;
+        }
+
         return url;
     }
 
