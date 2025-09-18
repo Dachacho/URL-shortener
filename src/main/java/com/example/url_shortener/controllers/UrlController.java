@@ -18,9 +18,18 @@ public class UrlController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Url> getUrlById(@PathVariable String id) {
-        String url = urlService.findById(id);
+        Url url = urlService.resolveAndIncrement(id);
         if (url != null) {
-            return ResponseEntity.status(302).location(URI.create(url)).build();
+            return ResponseEntity.status(302).location(URI.create(url.getOriginalUrl())).build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/info")
+    public ResponseEntity<Url> getUrlInfo(@PathVariable String id) {
+        Url url = urlService.getUrlInfo(id);
+        if (url != null) {
+            return ResponseEntity.ok(url);
         }
         return ResponseEntity.notFound().build();
     }

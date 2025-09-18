@@ -2,6 +2,7 @@ package com.example.url_shortener.services;
 
 import com.example.url_shortener.models.Url;
 import com.example.url_shortener.repositories.UrlRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -12,6 +13,17 @@ public class UrlService {
 
     public UrlService(UrlRepository urlRepository) {
         this.urlRepository = urlRepository;
+    }
+
+    @Transactional
+    public Url resolveAndIncrement(String id) {
+        Url url = urlRepository.findById(id).orElse(null);
+        if (url != null && !url.isDisabled() && (url.getExpiresAt() == null || url.getExpiresAt().isAfter(Instant.now()))) {
+            urlRepository.incrementVisitCount(id);
+            url.setVisitCount(url.getVisitCount() + 1);
+            return url;
+        }
+        return null;
     }
 
     private String generateShortId() {
@@ -44,6 +56,7 @@ public class UrlService {
         String existingId = urlRepository.findByOriginalUrl(normalizedUrl)
                 .map(Url::getId)
                 .orElse(null);
+
         if (existingId != null) {
             return existingId;
         }
@@ -59,15 +72,7 @@ public class UrlService {
         return shortId;
     }
 
-    public String findById(String id) {
-        Url url = urlRepository.findById(id).orElse(null);
-
-        if (url == null || url.isDisabled() || (url.getExpiresAt() != null && url.getExpiresAt().isBefore(Instant.now()))) {
-            return null;
-        }
-
-        url.setVisitCount(url.getVisitCount() + 1);
-
-        return url.getOriginalUrl();
+    public Url getUrlInfo(String id) {
+        return urlRepository.findById(id).orElse(null);
     }
 }
