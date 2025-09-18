@@ -24,7 +24,7 @@ public class Url {
 
     private Instant expiresAt;
 
-    private boolean disabled = false;
+    private boolean disabled;
 
     private long visitCount;
 
@@ -32,6 +32,7 @@ public class Url {
         this.id = id;
         this.originalUrl = originalUrl;
         this.createdAt = Instant.now();
+        this.expiresAt = Instant.now().plus(1, java.time.temporal.ChronoUnit.DAYS);
         this.disabled = false;
         this.visitCount = 0L;
     }
