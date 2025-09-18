@@ -52,8 +52,20 @@ public class UrlService {
         return url;
     }
 
+    private boolean isValidUrl(String url) {
+        try {
+            new java.net.URI(url);
+            return url.startsWith("http://") || url.startsWith("https://");
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public String createShortUrl(String originalUrl) {
         String normalizedUrl = normalizeUrl(originalUrl);
+        if (!isValidUrl(normalizedUrl)) {
+            throw new IllegalArgumentException("Invalid URL format");
+        }
         String existingId = urlRepository.findByOriginalUrl(normalizedUrl)
                 .map(Url::getId)
                 .orElse(null);
