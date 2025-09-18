@@ -3,9 +3,9 @@ services:
     image: postgres:16
     restart: always
     environment:
-      POSTGRES_USER: dachi
-      POSTGRES_PASSWORD: secretpassword
-      POSTGRES_DB: springdb
+      POSTGRES_USER: dachi # change this to your desired username
+      POSTGRES_PASSWORD: secretpassword # change this to your desired password
+      POSTGRES_DB: springdb # change this to your desired database name
     ports:
       - "5432:5432"
     volumes:
