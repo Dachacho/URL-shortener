@@ -1,5 +1,6 @@
 package com.example.url_shortener.services;
 
+import com.example.url_shortener.dtos.UrlResponse;
 import com.example.url_shortener.models.Url;
 import com.example.url_shortener.repositories.UrlRepository;
 import jakarta.transaction.Transactional;
@@ -72,7 +73,21 @@ public class UrlService {
         return shortId;
     }
 
-    public Url getUrlInfo(String id) {
-        return urlRepository.findById(id).orElse(null);
+    public UrlResponse getUrlInfo(String id) {
+        Url url =  urlRepository.findById(id).orElse(null);
+
+        if (url == null) {
+            return null;
+        }
+
+        UrlResponse urlResponse = new UrlResponse(
+            url.getId(),
+            url.getOriginalUrl(),
+            url.isDisabled(),
+            url.getExpiresAt(),
+            url.getVisitCount()
+        );
+
+        return urlResponse;
     }
 }

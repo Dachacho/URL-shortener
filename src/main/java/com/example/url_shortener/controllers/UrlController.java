@@ -1,6 +1,7 @@
 package com.example.url_shortener.controllers;
 
 import com.example.url_shortener.dtos.CreateUrlRequest;
+import com.example.url_shortener.dtos.UrlResponse;
 import com.example.url_shortener.models.Url;
 import com.example.url_shortener.services.UrlService;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +27,8 @@ public class UrlController {
     }
 
     @GetMapping("/{id}/info")
-    public ResponseEntity<Url> getUrlInfo(@PathVariable String id) {
-        Url url = urlService.getUrlInfo(id);
+    public ResponseEntity<UrlResponse> getUrlInfo(@PathVariable String id) {
+        UrlResponse url = urlService.getUrlInfo(id);
         if (url != null) {
             return ResponseEntity.ok(url);
         }
