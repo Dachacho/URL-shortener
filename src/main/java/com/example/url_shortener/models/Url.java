@@ -12,19 +12,27 @@ import java.time.Instant;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Url {
     @Id
     private String id;
     @Column(nullable = false)
     private String originalUrl;
     @Column(nullable = false)
-    private Instant createdAt = Instant.now();
+    private Instant createdAt;
 
     private Instant expiresAt;
 
     private boolean disabled = false;
 
-    private long visitCount = 0;
+    private long visitCount;
+
+    public Url(String id, String originalUrl) {
+        this.id = id;
+        this.originalUrl = originalUrl;
+        this.createdAt = Instant.now();
+        this.disabled = false;
+        this.visitCount = 0L;
+    }
 }

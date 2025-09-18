@@ -4,6 +4,8 @@ import com.example.url_shortener.models.Url;
 import com.example.url_shortener.repositories.UrlRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+
 @Service
 public class UrlService {
     private final UrlRepository urlRepository;
@@ -58,8 +60,14 @@ public class UrlService {
     }
 
     public String findById(String id) {
-        return urlRepository.findById(id)
-                .map(Url::getOriginalUrl)
-                .orElse(null);
+        Url url = urlRepository.findById(id).orElse(null);
+
+        if (url == null || url.isDisabled() || (url.getExpiresAt() != null && url.getExpiresAt().isBefore(Instant.now()))) {
+            return null;
+        }
+
+        url.setVisitCount(url.getVisitCount() + 1);
+
+        return url.getOriginalUrl();
     }
 }
