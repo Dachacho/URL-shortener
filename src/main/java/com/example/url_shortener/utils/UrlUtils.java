@@ -12,7 +12,10 @@ public class UrlUtils {
     }
 
     public static String normalizeUrl(String raw) {
-        String url = raw == null ? "" : raw.trim();
+        if (raw == null) {
+            return "";
+        }
+        String url = raw.trim();
 
         //for the quotes issue i had in the test cases
         if (url.startsWith("\"") && url.endsWith("\"") && url.length() > 1) {
