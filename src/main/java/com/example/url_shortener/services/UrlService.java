@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
+import static com.example.url_shortener.utils.UrlUtils.*;
+
 @Service
 public class UrlService {
     private final UrlRepository urlRepository;
@@ -25,40 +27,6 @@ public class UrlService {
             return url;
         }
         return null;
-    }
-
-    private String generateShortId() {
-        String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        StringBuilder shortId = new StringBuilder();
-        for (int i = 0; i < 6; i++) {
-            int index = (int) (Math.random() * characters.length());
-            shortId.append(characters.charAt(index));
-        }
-        return shortId.toString();
-    }
-
-    private String normalizeUrl(String raw) {
-        String url = raw == null ? "" : raw.trim();
-
-        //for the quotes issue i had in the test cases
-        if (url.startsWith("\"") && url.endsWith("\"") && url.length() > 1) {
-            url = url.substring(1, url.length() - 1);
-        }
-
-        if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            return "https://" + url;
-        }
-
-        return url;
-    }
-
-    private boolean isValidUrl(String url) {
-        try {
-            new java.net.URI(url);
-            return url.startsWith("http://") || url.startsWith("https://");
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     public String createShortUrl(String originalUrl) {
